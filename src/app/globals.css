@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-md: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-md));
+  background: black;
+}
+
+@layer base {
+
+  /* Tremor overrides for dark mode */
+  input,
+  select,
+  textarea {
+    background-color: rgb(15 23 42) !important;
+    /* slate-900 */
+    border-color: rgb(30 41 59) !important;
+    /* slate-800 */
+    color: white !important;
+    border-radius: 0.75rem !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
