@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Database, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, Database, Settings, Activity, Search } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import AlertToast from '@/components/alerts/AlertToast';
+import AlertCenter from '@/components/alerts/AlertCenter';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -27,6 +29,8 @@ export default function RootLayout({
 
     return (
         <div className="flex min-h-screen bg-[#050505] text-slate-200">
+            <AlertToast />
+
             {/* Sidebar */}
             <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-800/50 bg-[#0a0a0a]/80 backdrop-blur-xl">
                 <div className="flex h-full flex-col px-4 py-6">
@@ -70,11 +74,29 @@ export default function RootLayout({
             </aside>
 
             {/* Main Content */}
-            <main className="ml-64 flex-1 p-8">
-                <div className="mx-auto max-w-7xl">
-                    {children}
-                </div>
-            </main>
+            <div className="ml-64 flex-1 flex flex-col">
+                {/* Header */}
+                <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-800/50 bg-[#050505]/60 px-8 backdrop-blur-md">
+                    <div className="flex items-center gap-4 bg-slate-900/50 border border-slate-800 px-3 py-1.5 rounded-xl w-96">
+                        <Search size={16} className="text-slate-500" />
+                        <input
+                            type="text"
+                            placeholder="Search sensors, logs, or alerts..."
+                            className="bg-transparent border-none text-sm focus:ring-0 text-slate-300 w-full placeholder:text-slate-600"
+                        />
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <AlertCenter />
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-orange-500 to-amber-300 border border-white/20 shadow-lg" />
+                    </div>
+                </header>
+
+                <main className="p-8">
+                    <div className="mx-auto max-w-7xl">
+                        {children}
+                    </div>
+                </main>
+            </div>
         </div>
     );
 }
