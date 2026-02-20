@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'GUARDION | CMOS Sensor Health Dashboard',
+  title: 'CMOS Sensor Health Dashboard',
   description: 'Real-time diagnostic platform for optical sensors',
 };
 

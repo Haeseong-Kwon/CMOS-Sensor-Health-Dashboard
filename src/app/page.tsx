@@ -6,9 +6,10 @@ import MaintenanceCard from '@/components/dashboard/MaintenanceCard';
 import PredictiveChart from '@/components/analytics/PredictiveChart';
 import HealthReportModal from '@/components/analytics/HealthReportModal';
 import { Card, Title, Text, Grid, Col, Metric, BadgeDelta, Flex, Button } from '@tremor/react';
-import { Zap, Shield, AlertTriangle, Cpu, ExternalLink } from 'lucide-react';
+import { Zap, Shield, AlertTriangle, Cpu, ExternalLink, UploadCloud } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { SensorDevice, SensorAlert, HealthLog } from '@/types/sensor';
+import SensorMappingViewer from '@/components/dashboard/SensorMappingViewer';
 
 export default function DashboardPage() {
   const [sensors, setSensors] = useState<SensorDevice[]>([]);
@@ -16,6 +17,22 @@ export default function DashboardPage() {
   const [alerts, setAlerts] = useState<SensorAlert[]>([]);
   const [selectedSensor, setSelectedSensor] = useState<SensorDevice | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showMapping, setShowMapping] = useState(false);
+
+  const handleUpload = () => {
+    // Simulation of file upload and processing
+    setIsAnalyzing(true);
+    setShowMapping(true);
+
+    // Simulate processing time then finish
+    setTimeout(() => {
+      setIsAnalyzing(true); // Keep scanning for a bit
+      setTimeout(() => {
+        setIsAnalyzing(false); // Stop scanning, keep result
+      }, 5000);
+    }, 1000);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +66,13 @@ export default function DashboardPage() {
               <div key={i} className="h-8 w-8 rounded-full bg-slate-800 border-2 border-[#050505] flex items-center justify-center text-[10px] text-slate-500 font-bold">U{i}</div>
             ))}
           </div>
-          <Text className="text-xs text-slate-500 self-center">3 Active Users</Text>
+          <Button
+            className="bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700"
+            icon={UploadCloud}
+            onClick={handleUpload}
+          >
+            Upload Sensor Log
+          </Button>
         </div>
       </div>
 
@@ -68,7 +91,11 @@ export default function DashboardPage() {
 
       <Grid numItemsLg={6} className="gap-6">
         <Col numColSpanLg={4} className="space-y-6">
-          <RealtimeChart />
+          {showMapping ? (
+            <SensorMappingViewer isAnalyzing={isAnalyzing} />
+          ) : (
+            <RealtimeChart />
+          )}
           <PredictiveChart
             data={recentLogs.map(l => ({ timestamp: l.timestamp, value: l.temperature }))}
             threshold={65}

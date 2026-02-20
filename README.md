@@ -1,5 +1,12 @@
 # CMOS 이미지 센서(CIS) 상태 모니터링 및 성능 저하 예측 시스템: 신뢰성 분석 기술 리포트
 
+<div align="center">
+  <img src="assets/cmos_health_demo.gif" width="85%" />
+  <div style="margin-top: 10px; font-style: italic; color: #888;">
+    Figure 1: Real-time sensor mapping and automated diagnostic reporting workflow demonstrating defect triangulation and PDF generation.
+  </div>
+</div>
+
 ## 1. Technical Overview (기술 개요)
 
 본 기술 보고서는 **CMOS 이미지 센서(CMOS Image Sensor, CIS)**의 장기 구동 과정에서 발생하는 하드웨어적 성능 저하(Hardware Degradation) 문제를 정밀 모니터링하고, 이를 사전에 예측하기 위한 통합 진단 시스템의 설계 및 구현 내용을 다룬다.
