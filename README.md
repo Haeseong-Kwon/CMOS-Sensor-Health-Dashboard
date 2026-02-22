@@ -1,7 +1,7 @@
 # CMOS 이미지 센서(CIS) 상태 모니터링 및 성능 저하 예측 시스템: 신뢰성 분석 기술 리포트
 
 <div align="center">
-  <img src="assets/cmos_health_demo_v5.gif" alt="CMOS Sensor Health Dashboard Demo" width="85%" />
+  <img src="assets/cmos_health_demo_v6.gif" alt="CMOS Sensor Health Dashboard Demo" width="85%" />
   <div style="margin-top: 10px; font-style: italic; color: #888;">
     Figure 1: Real-time sensor mapping and automated diagnostic reporting workflow demonstrating defect triangulation and PDF generation.
   </div>

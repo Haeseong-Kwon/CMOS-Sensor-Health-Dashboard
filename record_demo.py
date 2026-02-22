@@ -24,17 +24,46 @@ def record():
         print("Navigating to localhost:3000...")
         page.goto('http://localhost:3000', wait_until='networkidle')
         
-        # Wait a bit
+        # Hide Next.js dev overlay
+        page.add_style_tag(content="nextjs-portal { display: none !important; }")
+        
         page.wait_for_timeout(2000)
 
-        # Click the 'Upload Sensor Log' button
+        # 1. Click "Upload Sensor Log"
         print("Clicking Upload Sensor Log...")
-        # Button is found by text
         page.get_by_text("Upload Sensor Log").click()
 
-        # Wait for simulation to finish (scanning takes ~6s)
+        # Wait for scanning simulation to finish (~6s) + show results
         print("Waiting for scanning to finish...")
-        page.wait_for_timeout(8000)
+        page.wait_for_timeout(7000)
+
+        # 2. Click a sensor to open HealthReportModal
+        print("Opening Sensor Report Modal...")
+        page.get_by_text("Alpha-X1").first.click()
+        page.wait_for_timeout(3000)
+
+        # Close the modal
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(1000)
+
+        # 3. Navigate to Sensor Inventory
+        print("Navigating to Sensor Inventory...")
+        page.get_by_text("Sensor Inventory").click()
+        page.wait_for_timeout(2500)
+
+        # 4. Open Register Device Modal
+        print("Opening Register Modal...")
+        page.get_by_text("Register New Sensor").click()
+        page.wait_for_timeout(2000)
+
+        # Close Register Modal
+        page.get_by_text("Cancel").click()
+        page.wait_for_timeout(1000)
+
+        # 5. Navigate to Status Monitoring
+        print("Navigating to Status Monitoring...")
+        page.get_by_text("Status Monitoring").click()
+        page.wait_for_timeout(3000)
 
         # Close context to save video
         video_path = page.video.path()
