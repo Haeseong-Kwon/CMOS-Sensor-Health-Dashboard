@@ -18,9 +18,10 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
 
     // Simulation effect
     useEffect(() => {
+        if (!isAnalyzing && scanLine === 0) {
+            return;
+        }
         if (!isAnalyzing) {
-            setPoints([]);
-            setScanLine(0);
             return;
         }
 
@@ -107,7 +108,7 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
             </Flex>
 
             <div className="mt-6 flex-1 relative bg-slate-900/50 rounded-xl border border-slate-800/50 overflow-hidden flex items-center justify-center">
-                {!isAnalyzing && points.length === 0 ? (
+                {!isAnalyzing && points.length === 0 && scanLine === 0 ? (
                     <div className="text-center">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 mb-4">
                             <Maximize2 className="text-slate-500" />

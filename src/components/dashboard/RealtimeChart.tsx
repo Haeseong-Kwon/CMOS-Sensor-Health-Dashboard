@@ -93,22 +93,23 @@ export default function RealtimeChart({ sensorId }: RealtimeChartProps) {
     );
 
     return (
-        <Card className={`transition-all duration-500 bg-[#0f0f0f] border-slate-800/50 ${isCurrentAnomaly ? 'ring-2 ring-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.1)]' : 'hover:border-orange-500/30'}`}>
-            <Flex alignItems="start">
+        <Card className={`transition-all duration-700 bg-gradient-to-br from-[#0f0f0f] to-[#151515] border ${isCurrentAnomaly ? 'border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.15)]' : 'border-slate-800/50 hover:border-orange-500/30'} shadow-xl group relative overflow-hidden`}>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-3xl -mr-32 -mt-32 rounded-full pointer-events-none" />
+            <Flex alignItems="start" className="relative z-10">
                 <div className="flex-1">
-                    <Title className="text-white flex items-center gap-2">
-                        <Activity className={isCurrentAnomaly ? "text-red-500" : "text-orange-500"} size={18} />
+                    <Title className="text-white flex items-center gap-2 text-lg tracking-tight">
+                        <Activity className={isCurrentAnomaly ? "text-red-500" : "text-orange-500 group-hover:scale-110 transition-transform"} size={20} />
                         Real-time Sensor Vitals
                     </Title>
-                    <Text className="text-slate-400">Monitoring temperature and noise levels in real-time</Text>
+                    <Text className="text-slate-400 text-xs mt-1">Monitoring temperature and noise levels in real-time</Text>
                 </div>
                 {latestValue && (
                     <div className="text-right">
-                        <Badge color={isCurrentAnomaly ? "red" : "orange"} icon={isCurrentAnomaly ? AlertTriangle : undefined}>
-                            {isCurrentAnomaly ? "ALARM" : "LIVE"}
+                        <Badge color={isCurrentAnomaly ? "red" : "amber"} icon={isCurrentAnomaly ? AlertTriangle : undefined} className="bg-opacity-10 text-[10px] uppercase font-bold tracking-widest shadow-sm">
+                            {isCurrentAnomaly ? "ALARM" : "LIVE FEED"}
                         </Badge>
-                        <div className={`mt-2 text-2xl font-bold tracking-tighter ${isCurrentAnomaly ? 'text-red-500' : 'text-white'}`}>
-                            {latestValue.temperature.toFixed(1)}°C
+                        <div className={`mt-2 text-3xl font-bold tracking-tighter drop-shadow-lg ${isCurrentAnomaly ? 'text-red-500' : 'text-white'}`}>
+                            {latestValue.temperature.toFixed(1)}<span className="text-sm text-slate-500 font-medium ml-1">°C</span>
                         </div>
                     </div>
                 )}

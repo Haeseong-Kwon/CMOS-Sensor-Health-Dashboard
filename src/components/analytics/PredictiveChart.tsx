@@ -46,18 +46,19 @@ export default function PredictiveChart({ data, threshold, title, unit }: Predic
     }, [data, threshold]);
 
     return (
-        <Card className="bg-[#0f0f0f] border-slate-800">
-            <Flex alignItems="start" justifyContent="between">
+        <Card className="bg-gradient-to-br from-[#0f0f0f] to-[#151515] border border-slate-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl -ml-32 -mt-32 rounded-full pointer-events-none" />
+            <Flex alignItems="start" justifyContent="between" className="relative z-10">
                 <div>
-                    <Title className="text-white flex items-center gap-2">
-                        <TrendingUp className="text-orange-500" size={18} />
+                    <Title className="text-white flex items-center gap-2 text-lg tracking-tight">
+                        <TrendingUp className="text-orange-500 group-hover:scale-110 transition-transform" size={20} />
                         {title} Forecast
                     </Title>
-                    <Text className="text-slate-500">Predicted performance trend for next 30 days based on historic patterns</Text>
+                    <Text className="text-slate-500 text-xs mt-1">Predicted performance trend for next 30 days based on historic patterns</Text>
                 </div>
                 <div className="flex flex-col items-end">
-                    <Badge color="orange" icon={Activity}>Analyzed</Badge>
-                    <Text className="text-[10px] text-slate-600 mt-1 uppercase font-bold tracking-widest">A.I. Model v2.4</Text>
+                    <Badge color="orange" icon={Activity} className="bg-opacity-10 text-[10px] uppercase font-bold tracking-widest shadow-sm">Analyzed</Badge>
+                    <Text className="text-[10px] text-slate-600 mt-2 uppercase font-bold tracking-widest">A.I. Model v2.4</Text>
                 </div>
             </Flex>
 

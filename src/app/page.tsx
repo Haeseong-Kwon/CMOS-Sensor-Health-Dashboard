@@ -36,13 +36,38 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: sensorData } = await supabase.from('sensor_devices').select('*').limit(5);
-      const { data: logData } = await supabase.from('sensor_health_logs').select('*').order('timestamp', { ascending: false }).limit(20);
-      const { data: alertData } = await supabase.from('sensor_alerts').select('*').order('timestamp', { ascending: false }).limit(10);
+      let { data: sensorData } = await supabase.from('sensor_devices').select('*').limit(5);
+      let { data: logData } = await supabase.from('sensor_health_logs').select('*').order('timestamp', { ascending: false }).limit(20);
+      let { data: alertData } = await supabase.from('sensor_alerts').select('*').order('timestamp', { ascending: false }).limit(10);
 
-      if (sensorData) setSensors(sensorData);
-      if (logData) setRecentLogs(logData);
-      if (alertData) setAlerts(alertData);
+      // MOCK DATA FALLBACK FOR DEMO
+      if (!sensorData || sensorData.length === 0) {
+        sensorData = [
+          { id: '1', name: 'Alpha-X1', status: 'active', location: 'Cleanroom A', model: 'CMOS-X100' },
+          { id: '2', name: 'Beta-Y2', status: 'active', location: 'Assembly Line B', model: 'CMOS-Y200' },
+          { id: '3', name: 'Gamma-Z3', status: 'warning', location: 'Testing Lab C', model: 'CMOS-Z300' }
+        ] as any;
+      }
+      if (!logData || logData.length === 0) {
+        const now = Date.now();
+        logData = Array.from({ length: 20 }).map((_, i) => ({
+          timestamp: new Date(now - i * 60000).toISOString(),
+          temperature: 55 + Math.random() * 15,
+          noise_level: 20 + Math.random() * 10,
+          defect_count: Math.floor(Math.random() * 5),
+          sensor_id: '1'
+        })) as any;
+      }
+      if (!alertData || alertData.length === 0) {
+        alertData = [
+          { id: 'a1', sensor_id: '1', message: 'Thermal spike detected > 65°C', severity: 'high', timestamp: new Date().toISOString() },
+          { id: 'a2', sensor_id: '3', message: 'Noise level threshold exceeded', severity: 'medium', timestamp: new Date(Date.now() - 3600000).toISOString() }
+        ] as any;
+      }
+
+      setSensors(sensorData || []);
+      setRecentLogs(logData || []);
+      setAlerts(alertData || []);
     };
 
     fetchData();
