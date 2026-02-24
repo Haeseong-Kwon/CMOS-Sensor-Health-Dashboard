@@ -20,18 +20,19 @@ export default function DashboardPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showMapping, setShowMapping] = useState(false);
 
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
   const handleUpload = () => {
-    // Simulation of file upload and processing
+    // 1. Initial Empty State -> 2. Start Loading State
     setIsAnalyzing(true);
     setShowMapping(true);
 
-    // Simulate processing time then finish
+    // 3. Simulate a deliberately long processing time (7 seconds)
     setTimeout(() => {
-      setIsAnalyzing(true); // Keep scanning for a bit
-      setTimeout(() => {
-        setIsAnalyzing(false); // Stop scanning, keep result
-      }, 5000);
-    }, 1000);
+      // Data finishes processing
+      setIsDataLoaded(true);
+      setIsAnalyzing(false);
+    }, 7000);
   };
 
   useEffect(() => {
@@ -96,41 +97,89 @@ export default function DashboardPage() {
             ))}
           </div>
           <Button
-            className="bg-cyan-600 hover:bg-cyan-500 text-white border-none shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all font-bold px-6 py-2 h-10"
-            icon={UploadCloud}
-            onClick={handleUpload}
+            className={`transition-all font-bold px-6 py-2 h-10 border-none relative overflow-hidden ${isAnalyzing
+                ? 'bg-cyan-800 text-cyan-200 cursor-not-allowed shadow-inner'
+                : isDataLoaded
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                  : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              }`}
+            onClick={isAnalyzing ? undefined : handleUpload}
+            disabled={isAnalyzing}
           >
-            Upload Sensor Log
+            {isAnalyzing ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full border-2 border-cyan-200 border-t-cyan-500 animate-spin" />
+                Analyzing Sensor Stream...
+              </span>
+            ) : isDataLoaded ? (
+              <span className="flex items-center gap-2">
+                <UploadCloud size={16} />
+                Update Log
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <UploadCloud size={16} />
+                Upload Sensor Log
+              </span>
+            )}
+
+            {/* Progress bar overlay during analysis */}
+            {isAnalyzing && (
+              <div
+                className="absolute bottom-0 left-0 h-1 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-[7000ms] ease-linear w-full origin-left animate-[scaleX_7s_linear]"
+              />
+            )}
           </Button>
         </div>
       </div>
 
       {/* Top Section: Predictive Analytics Widgets */}
       <Grid numItemsLg={3} className="gap-6">
-        {sensors.slice(0, 3).map((sensor, idx) => (
-          <MaintenanceCard
-            key={sensor.id}
-            name={sensor.name}
-            currentValue={idx === 0 ? 62 : idx === 1 ? 45 : 58} // Mock data for demo
-            threshold={65}
-            rulDays={idx === 0 ? 12 : idx === 1 ? 48 : 24}
-          />
-        ))}
+        {isDataLoaded ? sensors.slice(0, 3).map((sensor, idx) => (
+          <div key={sensor.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700 w-full" style={{ animationDelay: `${idx * 150}ms`, animationFillMode: 'both' }}>
+            <MaintenanceCard
+              name={sensor.name}
+              currentValue={idx === 0 ? 62 : idx === 1 ? 45 : 58} // Mock data for demo
+              threshold={65}
+              rulDays={idx === 0 ? 12 : idx === 1 ? 48 : 24}
+            />
+          </div>
+        )) : (
+          // Empty State Placeholders
+          [1, 2, 3].map(i => (
+            <Card key={`empty-${i}`} className="bg-[#050505] border-[#1f2937] border-dashed flex flex-col items-center justify-center opacity-50 min-h-[160px]">
+              <Shield size={24} className="text-slate-700 mb-2" />
+              <Text className="text-slate-600 uppercase font-bold text-[10px] tracking-widest leading-none">Awaiting Data Stream</Text>
+            </Card>
+          ))
+        )}
       </Grid>
 
       <Grid numItemsLg={6} className="gap-6">
         <Col numColSpanLg={4} className="space-y-6">
           {showMapping ? (
-            <SensorMappingViewer isAnalyzing={isAnalyzing} />
+            <SensorMappingViewer isAnalyzing={isAnalyzing} isDataLoaded={isDataLoaded} />
           ) : (
-            <RealtimeChart />
+            <div className="animate-in fade-in duration-1000">
+              <RealtimeChart />
+            </div>
           )}
-          <PredictiveChart
-            data={recentLogs.map(l => ({ timestamp: l.timestamp, value: l.temperature }))}
-            threshold={65}
-            title="Thermal Integrity"
-            unit="°C"
-          />
+
+          {isDataLoaded ? (
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
+              <PredictiveChart
+                data={recentLogs.map(l => ({ timestamp: l.timestamp, value: l.temperature }))}
+                threshold={65}
+                title="Thermal Integrity"
+                unit="°C"
+              />
+            </div>
+          ) : (
+            <Card className="bg-[#050505] border-[#1f2937] border-dashed flex flex-col items-center justify-center opacity-50 h-[380px]">
+              <Zap size={32} className="text-slate-700 mb-3 animate-pulse" />
+              <Text className="text-slate-600 uppercase font-bold text-xs tracking-widest">Connect array to begin forecast</Text>
+            </Card>
+          )}
         </Col>
 
         <Col numColSpanLg={2} className="space-y-6 relative z-10">
@@ -140,8 +189,8 @@ export default function DashboardPage() {
               Active Sensor Array
             </Title>
             <div className="mt-4 space-y-4">
-              {sensors.map((sensor) => (
-                <div key={sensor.id} className="group flex items-center gap-4 p-3 rounded-xl bg-[#0a0a0a] border border-[#1f2937] hover:border-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all cursor-pointer" onClick={() => handleOpenReport(sensor)}>
+              {isDataLoaded ? sensors.map((sensor, idx) => (
+                <div key={sensor.id} className="group animate-in fade-in slide-in-from-right-4 duration-500 flex items-center gap-4 p-3 rounded-xl bg-[#0a0a0a] border border-[#1f2937] hover:border-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all cursor-pointer" onClick={() => handleOpenReport(sensor)} style={{ animationDelay: `${idx * 150 + 600}ms`, animationFillMode: 'both' }}>
                   <div className="h-10 w-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                     <Cpu size={18} />
                   </div>
@@ -151,9 +200,14 @@ export default function DashboardPage() {
                   </div>
                   <ExternalLink size={16} className="text-slate-600 group-hover:text-cyan-400 transition-colors" />
                 </div>
-              ))}
+              )) : (
+                <div className="py-8 flex flex-col items-center">
+                  <Cpu size={24} className="text-slate-800 mb-2" />
+                  <p className="text-xs text-slate-600 font-bold uppercase tracking-widest text-center">Standby</p>
+                </div>
+              )}
             </div>
-            <Button variant="light" className="w-full mt-6 text-xs text-slate-500 hover:text-cyan-400 font-bold tracking-widest uppercase transition-colors" onClick={() => window.location.href = '/inventory'}>View All Sensors</Button>
+            <Button variant="light" disabled={!isDataLoaded} className="w-full mt-6 text-xs text-slate-500 hover:text-cyan-400 font-bold tracking-widest uppercase transition-colors" onClick={() => window.location.href = '/inventory'}>View All Sensors</Button>
           </Card>
 
           <Card className="bg-[#050505] border-[#1f2937] shadow-xl">
@@ -162,14 +216,18 @@ export default function DashboardPage() {
               Recent Anomalies
             </Title>
             <div className="mt-4 space-y-3">
-              {alerts.slice(0, 4).map(alert => (
-                <div key={alert.id} className="flex gap-3 items-start border-l-2 border-red-500/80 bg-[#0a0a0a] p-3 rounded-r-xl">
+              {isDataLoaded ? alerts.slice(0, 4).map((alert, idx) => (
+                <div key={alert.id} className="animate-in fade-in slide-in-from-right-4 duration-500 flex gap-3 items-start border-l-2 border-red-500/80 bg-[#0a0a0a] p-3 rounded-r-xl" style={{ animationDelay: `${idx * 150 + 900}ms`, animationFillMode: 'both' }}>
                   <div className="flex-1">
                     <p className="text-xs text-slate-200 font-bold line-clamp-1">{alert.message}</p>
                     <p className="text-[10px] text-slate-500 mt-1 font-mono">{new Date(alert.timestamp).toLocaleTimeString()}</p>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="py-6 flex flex-col items-center">
+                  <p className="text-[10px] text-slate-700 font-bold uppercase tracking-widest text-center leading-relaxed">No anomalies detected<br />in active session</p>
+                </div>
+              )}
             </div>
           </Card>
         </Col>

@@ -11,7 +11,7 @@ interface Point {
     type: 'hot' | 'dead' | 'noise';
 }
 
-export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: boolean }) {
+export default function SensorMappingViewer({ isAnalyzing, isDataLoaded }: { isAnalyzing: boolean; isDataLoaded?: boolean }) {
     const [points, setPoints] = useState<Point[]>([]);
     const [scanLine, setScanLine] = useState(0);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -112,10 +112,10 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
             </Flex>
 
             <div className="mt-6 flex-1 relative bg-black rounded-xl border border-[#1f2937] shadow-inner overflow-hidden flex items-center justify-center">
-                {!isAnalyzing && points.length === 0 && scanLine === 0 ? (
+                {!isAnalyzing && !isDataLoaded && points.length === 0 && scanLine === 0 ? (
                     <div className="text-center">
-                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 mb-4">
-                            <Maximize2 className="text-slate-500" />
+                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/50 mb-4 shadow-inner">
+                            <Maximize2 className="text-slate-600" />
                         </div>
                         <p className="text-slate-500 text-sm">Waiting for data stream...</p>
                         <p className="text-slate-600 text-xs mt-1">Upload sensor log to initiate mapping</p>

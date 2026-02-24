@@ -27,42 +27,47 @@ def record():
         # Hide Next.js dev overlay
         page.add_style_tag(content="nextjs-portal { display: none !important; }")
         
-        page.wait_for_timeout(2000)
+        # STEP 1: Wait on the initial empty dashboard to show off the empty state
+        print("Waiting on initial empty state...")
+        page.wait_for_timeout(3000)
 
-        # 1. Click "Upload Sensor Log"
+        # STEP 2: Deliberately click "Upload Sensor Log"
         print("Clicking Upload Sensor Log...")
         page.get_by_text("Upload Sensor Log").click()
 
-        # Wait for scanning simulation to finish (~6s) + show results
-        print("Waiting for scanning to finish...")
-        page.wait_for_timeout(7000)
+        # STEP 3: Wait patiently while the loading spinner/progress completes (7.5s)
+        print("Waiting for 'Analyzing...' to finish...")
+        page.wait_for_timeout(7500)
+        
+        # STEP 4: Let the data animate in smoothly
+        print("Data loaded, letting animations finish...")
+        page.wait_for_timeout(3000)
 
-        # 2. Click a sensor to open HealthReportModal
+        # STEP 5: Move mouse over charts to trigger tooltips
+        print("Hovering over Thermal Integrity Predictive Chart...")
+        page.mouse.move(800, 600) # approximate over predictive chart
+        page.wait_for_timeout(1000)
+        page.mouse.move(700, 600)
+        page.wait_for_timeout(1000)
+        
+        print("Hovering over Realtime Chart...")
+        page.mouse.move(400, 400) # approximate over realtime chart
+        page.wait_for_timeout(1000)
+        page.mouse.move(500, 400)
+        page.wait_for_timeout(2000)
+
+        # STEP 6: Open Sensor Report Modal
         print("Opening Sensor Report Modal...")
         page.get_by_text("Alpha-X1").first.click()
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(4000)
 
         # Close the modal
         page.keyboard.press("Escape")
-        page.wait_for_timeout(1000)
-
-        # 3. Navigate to Sensor Inventory
-        print("Navigating to Sensor Inventory...")
-        page.get_by_text("Sensor Inventory").click()
-        page.wait_for_timeout(2500)
-
-        # 4. Open Register Device Modal
-        print("Opening Register Modal...")
-        page.get_by_text("Register New Sensor").click()
         page.wait_for_timeout(2000)
 
-        # Close Register Modal
-        page.get_by_text("Cancel").click()
-        page.wait_for_timeout(1000)
-
-        # 5. Navigate to Status Monitoring
-        print("Navigating to Status Monitoring...")
-        page.get_by_text("Status Monitoring").click()
+        # STEP 7: Check other pages briefly (Inventory & Monitoring)
+        print("Navigating to Sensor Inventory...")
+        page.get_by_text("Sensor Inventory").click()
         page.wait_for_timeout(3000)
 
         # Close context to save video
@@ -73,7 +78,7 @@ def record():
     print(f"Video saved at {video_path}")
     print("Converting to high-quality GIF...")
 
-    gif_path = 'assets/cmos_health_demo_hq.gif'
+    gif_path = 'assets/sensor_dashboard_full_workflow.gif'
     
     # Run ffmpeg to generate palette, then apply it for a high quality gif at 60fps
     cmd = [
