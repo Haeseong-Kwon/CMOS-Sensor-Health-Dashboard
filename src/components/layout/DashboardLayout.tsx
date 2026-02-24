@@ -31,9 +31,12 @@ export default function RootLayout({
     const [isReportOpen, setIsReportOpen] = useState(false);
 
     return (
-        <div className="flex h-screen w-full bg-[#050505] text-slate-200 overflow-hidden">
+        <div className="flex h-screen w-full bg-[#050505] text-slate-200 overflow-hidden relative shadow-[inset_0_0_120px_rgba(37,99,235,0.3)] border-[3px] border-blue-600/20">
             <AlertToast />
             <ReportGenerationModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} />
+
+            {/* Simulated Recording Progress Bar */}
+            <div className="absolute bottom-0 left-0 h-1 bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)] z-50 animate-[scaleX_30s_linear_forwards] w-full origin-left" />
 
             {/* Sidebar */}
             <aside className="w-64 flex-none border-r border-slate-800/50 bg-[#0a0a0a]/80 backdrop-blur-xl flex flex-col z-40">

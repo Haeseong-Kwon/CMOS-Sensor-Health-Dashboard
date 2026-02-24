@@ -80,10 +80,10 @@ def record():
 
     gif_path = 'assets/sensor_dashboard_full_workflow.gif'
     
-    # Run ffmpeg to generate palette, then apply it for a high quality gif at 60fps
+    # Run ffmpeg to generate palette, then apply it for a high quality gif at 30fps and 1024w to fix Github freeze
     cmd = [
         'ffmpeg', '-y', '-i', video_path, 
-        '-vf', 'fps=60,scale=1280:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5', 
+        '-vf', 'fps=30,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5', 
         '-loop', '0', gif_path
     ]
     
