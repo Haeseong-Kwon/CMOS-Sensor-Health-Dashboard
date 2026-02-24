@@ -31,12 +31,15 @@ export default function RootLayout({
     const [isReportOpen, setIsReportOpen] = useState(false);
 
     return (
-        <div className="flex h-screen w-full bg-[#050505] text-slate-200 overflow-hidden relative shadow-[inset_0_0_120px_rgba(37,99,235,0.3)] border-[3px] border-blue-600/20">
+        <div className="flex h-screen w-full bg-[#050505] text-slate-200 overflow-hidden relative">
             <AlertToast />
             <ReportGenerationModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} />
 
+            {/* Global Glowing Overlay (Z-Index 50 to sit exactly on top of everything without blocking clicks) */}
+            <div className="absolute inset-0 z-50 pointer-events-none shadow-[inset_0_0_120px_rgba(37,99,235,0.5)] border-[4px] border-blue-600/40" />
+
             {/* Simulated Recording Progress Bar */}
-            <div className="absolute bottom-0 left-0 h-1 bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)] z-50 animate-[scaleX_30s_linear_forwards] w-full origin-left" />
+            <div className="absolute bottom-0 left-0 h-1.5 bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,1)] z-50 animate-demo-progress" />
 
             {/* Sidebar */}
             <aside className="w-64 flex-none border-r border-slate-800/50 bg-[#0a0a0a]/80 backdrop-blur-xl flex flex-col z-40">

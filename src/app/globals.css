@@ -26,6 +26,20 @@ body {
   }
 }
 
+@keyframes demo-progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.animate-demo-progress {
+  animation: demo-progress 30.5s linear forwards;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
