@@ -46,19 +46,19 @@ export default function PredictiveChart({ data, threshold, title, unit }: Predic
     }, [data, threshold]);
 
     return (
-        <Card className="bg-gradient-to-br from-[#0f0f0f] to-[#151515] border border-slate-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl -ml-32 -mt-32 rounded-full pointer-events-none" />
+        <Card className="bg-[#050505] border border-[#1f2937] shadow-xl hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] hover:border-violet-500/50 transition-all duration-500 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-violet-500/10 blur-[80px] -ml-32 -mt-32 rounded-full pointer-events-none" />
             <Flex alignItems="start" justifyContent="between" className="relative z-10">
                 <div>
                     <Title className="text-white flex items-center gap-2 text-lg tracking-tight">
-                        <TrendingUp className="text-orange-500 group-hover:scale-110 transition-transform" size={20} />
+                        <TrendingUp className="text-violet-400 group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.8)] transition-all" size={20} />
                         {title} Forecast
                     </Title>
                     <Text className="text-slate-500 text-xs mt-1">Predicted performance trend for next 30 days based on historic patterns</Text>
                 </div>
                 <div className="flex flex-col items-end">
-                    <Badge color="orange" icon={Activity} className="bg-opacity-10 text-[10px] uppercase font-bold tracking-widest shadow-sm">Analyzed</Badge>
-                    <Text className="text-[10px] text-slate-600 mt-2 uppercase font-bold tracking-widest">A.I. Model v2.4</Text>
+                    <Badge color="violet" icon={Activity} className="bg-opacity-10 text-[10px] uppercase font-bold tracking-widest shadow-sm">Analyzed</Badge>
+                    <Text className="text-[10px] text-slate-500 mt-2 uppercase font-bold tracking-widest">A.I. Engine v2.4</Text>
                 </div>
             </Flex>
 
@@ -67,7 +67,7 @@ export default function PredictiveChart({ data, threshold, title, unit }: Predic
                 data={chartData}
                 index="time"
                 categories={["Historic", "Predictive", "Threshold"]}
-                colors={["orange", "blue", "red"]}
+                colors={["cyan", "violet", "red"]}
                 valueFormatter={(val) => `${val}${unit}`}
                 showLegend={true}
                 showGridLines={true}
@@ -75,10 +75,10 @@ export default function PredictiveChart({ data, threshold, title, unit }: Predic
                 connectNulls={false}
             />
 
-            <div className="mt-4 p-3 bg-blue-500/5 rounded-xl border border-blue-500/10 flex items-start gap-3">
-                <Icon icon={Info} color="blue" variant="simple" size="sm" />
+            <div className="mt-4 p-3 bg-[#0a0a0a] rounded-xl border border-violet-500/20 flex items-start gap-3">
+                <Icon icon={Info} color="violet" variant="simple" size="sm" />
                 <Text className="text-slate-400 text-xs">
-                    The <span className="text-blue-500 font-bold">Blue dotted line</span> indicates the predicted trajectory.
+                    The <span className="text-violet-400 font-bold drop-shadow-[0_0_5px_rgba(139,92,246,0.8)]">Violet line</span> indicates the predicted trajectory.
                     The sensor is expected to reach critical degradation limits in approximately 12 days.
                 </Text>
             </div>

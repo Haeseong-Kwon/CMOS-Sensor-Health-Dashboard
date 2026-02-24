@@ -73,12 +73,12 @@ def record():
     print(f"Video saved at {video_path}")
     print("Converting to high-quality GIF...")
 
-    gif_path = 'assets/cmos_health_demo_v4.gif'
+    gif_path = 'assets/cmos_health_demo_hq.gif'
     
-    # Run ffmpeg to generate palette, then apply it for a high quality gif
+    # Run ffmpeg to generate palette, then apply it for a high quality gif at 60fps
     cmd = [
         'ffmpeg', '-y', '-i', video_path, 
-        '-vf', 'fps=15,scale=1280:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse', 
+        '-vf', 'fps=60,scale=1280:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5', 
         '-loop', '0', gif_path
     ]
     

@@ -68,9 +68,13 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
             ctx.beginPath();
             ctx.arc(x, y, 3, 0, Math.PI * 2);
             if (p.type === 'hot') ctx.fillStyle = '#ef4444'; // red
-            else if (p.type === 'dead') ctx.fillStyle = '#000000'; // black
-            else ctx.fillStyle = '#eab308'; // yellow/orange
+            else if (p.type === 'dead') ctx.fillStyle = '#171717'; // very dark gray for dead pixels
+            else ctx.fillStyle = '#f59e0b'; // amber
+
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = ctx.fillStyle;
             ctx.fill();
+            ctx.shadowBlur = 0; // reset
         });
 
         // Draw scan line
@@ -79,10 +83,10 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
             ctx.beginPath();
             ctx.moveTo(0, y);
             ctx.lineTo(canvas.width, y);
-            ctx.strokeStyle = '#22c55e'; // green scanline
+            ctx.strokeStyle = '#10b981'; // emerald scanline
             ctx.lineWidth = 2;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#22c55e';
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#10b981';
             ctx.stroke();
             ctx.shadowBlur = 0;
         }
@@ -90,24 +94,24 @@ export default function SensorMappingViewer({ isAnalyzing }: { isAnalyzing: bool
     }, [points, scanLine, isAnalyzing]);
 
     return (
-        <Card className="bg-[#0f0f0f] border-slate-800/50 h-[400px] flex flex-col relative overflow-hidden">
-            <div className="absolute inset-0 bg-grid-slate-800/[0.1] -z-10" />
-            <Flex>
+        <Card className="bg-[#050505] border-[#1f2937] shadow-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all h-[400px] flex flex-col relative overflow-hidden group">
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+            <Flex className="relative z-10">
                 <div>
                     <Title className="text-white flex items-center gap-2">
-                        <Maximize2 size={18} className="text-blue-500" />
-                        Sensor Mapping Viewer
+                        <Maximize2 size={18} className="text-emerald-500 group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all" />
+                        Sensor Array Topography
                     </Title>
-                    <Text className="text-slate-400">Real-time defect triangulation & noise heatmap</Text>
+                    <Text className="text-slate-400">Real-time defect triangulation blueprint</Text>
                 </div>
                 {isAnalyzing && (
-                    <Badge color="green" icon={RefreshCw} className="animate-pulse">
+                    <Badge color="emerald" icon={RefreshCw} className="animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]">
                         SCANNING {Math.min(scanLine, 100)}%
                     </Badge>
                 )}
             </Flex>
 
-            <div className="mt-6 flex-1 relative bg-slate-900/50 rounded-xl border border-slate-800/50 overflow-hidden flex items-center justify-center">
+            <div className="mt-6 flex-1 relative bg-black rounded-xl border border-[#1f2937] shadow-inner overflow-hidden flex items-center justify-center">
                 {!isAnalyzing && points.length === 0 && scanLine === 0 ? (
                     <div className="text-center">
                         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 mb-4">

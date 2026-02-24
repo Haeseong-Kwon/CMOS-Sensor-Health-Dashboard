@@ -93,12 +93,12 @@ export default function RealtimeChart({ sensorId }: RealtimeChartProps) {
     );
 
     return (
-        <Card className={`transition-all duration-700 bg-gradient-to-br from-[#0f0f0f] to-[#151515] border ${isCurrentAnomaly ? 'border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.15)]' : 'border-slate-800/50 hover:border-orange-500/30'} shadow-xl group relative overflow-hidden`}>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-3xl -mr-32 -mt-32 rounded-full pointer-events-none" />
+        <Card className={`transition-all duration-700 bg-[#050505] border ${isCurrentAnomaly ? 'border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.3)]' : 'border-[#1f2937] hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]'} shadow-2xl group relative overflow-hidden`}>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 blur-[80px] -mr-32 -mt-32 rounded-full pointer-events-none" />
             <Flex alignItems="start" className="relative z-10">
                 <div className="flex-1">
                     <Title className="text-white flex items-center gap-2 text-lg tracking-tight">
-                        <Activity className={isCurrentAnomaly ? "text-red-500" : "text-orange-500 group-hover:scale-110 transition-transform"} size={20} />
+                        <Activity className={isCurrentAnomaly ? "text-red-500 animate-pulse" : "text-cyan-500 group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] transition-all"} size={20} />
                         Real-time Sensor Vitals
                     </Title>
                     <Text className="text-slate-400 text-xs mt-1">Monitoring temperature and noise levels in real-time</Text>
@@ -116,11 +116,11 @@ export default function RealtimeChart({ sensorId }: RealtimeChartProps) {
             </Flex>
 
             <AreaChart
-                className="mt-8 h-80"
+                className="mt-8 h-80 drop-shadow-md"
                 data={chartData}
                 index="time"
                 categories={['Temperature', 'Noise Level']}
-                colors={isCurrentAnomaly ? ['red', 'rose'] : ['orange', 'blue']}
+                colors={isCurrentAnomaly ? ['red', 'rose'] : ['cyan', 'emerald']}
                 valueFormatter={(number: number) => `${number.toFixed(2)}`}
                 showAnimation={true}
                 showLegend={true}
@@ -133,12 +133,12 @@ export default function RealtimeChart({ sensorId }: RealtimeChartProps) {
             {settings && (
                 <div className="mt-4 flex gap-4">
                     <div className="flex items-center gap-2">
-                        <div className="h-0.5 w-4 bg-orange-500 opacity-50" />
-                        <Text className="text-[10px] text-slate-500 uppercase">Limit: {settings.temp_threshold}°C</Text>
+                        <div className="h-0.5 w-4 bg-cyan-500 opacity-80 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
+                        <Text className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Limit: {settings.temp_threshold}°C</Text>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="h-0.5 w-4 bg-blue-500 opacity-50" />
-                        <Text className="text-[10px] text-slate-500 uppercase">Limit: {settings.noise_threshold}dB</Text>
+                        <div className="h-0.5 w-4 bg-emerald-500 opacity-80 shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
+                        <Text className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Limit: {settings.noise_threshold}dB</Text>
                     </div>
                 </div>
             )}

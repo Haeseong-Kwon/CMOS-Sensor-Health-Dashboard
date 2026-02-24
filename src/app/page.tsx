@@ -79,20 +79,24 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-end justify-between">
+    <div className="space-y-8 relative">
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-cyan-900/10 to-transparent pointer-events-none -m-8" />
+      <div className="flex items-end justify-between relative z-10">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Predictive Maintenance Dashboard</h1>
-          <p className="text-slate-400">Advanced diagnostic intelligence and future performance forecasting.</p>
+          <h1 className="text-4xl font-extrabold tracking-tighter text-white mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">Predictive Maintenance Dashboard</h1>
+          <p className="text-cyan-500/80 font-mono text-sm uppercase tracking-widest font-bold flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            Advanced diagnostic intelligence & future performance forecasting
+          </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4 items-center">
           <div className="flex -space-x-2">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-8 w-8 rounded-full bg-slate-800 border-2 border-[#050505] flex items-center justify-center text-[10px] text-slate-500 font-bold">U{i}</div>
+              <div key={i} className="h-9 w-9 rounded-full bg-[#0a0a0a] border-2 border-[#1f2937] flex items-center justify-center text-[10px] text-cyan-500 font-bold z-[1]">U{i}</div>
             ))}
           </div>
           <Button
-            className="bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700"
+            className="bg-cyan-600 hover:bg-cyan-500 text-white border-none shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all font-bold px-6 py-2 h-10"
             icon={UploadCloud}
             onClick={handleUpload}
           >
@@ -129,34 +133,40 @@ export default function DashboardPage() {
           />
         </Col>
 
-        <Col numColSpanLg={2} className="space-y-6">
-          <Card className="bg-[#0f0f0f] border-slate-800/50">
-            <Title className="text-white">Active Sensor Array</Title>
+        <Col numColSpanLg={2} className="space-y-6 relative z-10">
+          <Card className="bg-[#050505] border-[#1f2937] shadow-xl">
+            <Title className="text-white tracking-tight flex items-center gap-2">
+              <Cpu size={18} className="text-cyan-500" />
+              Active Sensor Array
+            </Title>
             <div className="mt-4 space-y-4">
               {sensors.map((sensor) => (
-                <div key={sensor.id} className="group flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-orange-500/30 transition-all cursor-pointer" onClick={() => handleOpenReport(sensor)}>
-                  <div className="h-8 w-8 rounded bg-orange-500/10 flex items-center justify-center text-orange-500">
-                    <Cpu size={16} />
+                <div key={sensor.id} className="group flex items-center gap-4 p-3 rounded-xl bg-[#0a0a0a] border border-[#1f2937] hover:border-cyan-500/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all cursor-pointer" onClick={() => handleOpenReport(sensor)}>
+                  <div className="h-10 w-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                    <Cpu size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{sensor.name}</p>
-                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">{sensor.status} • {sensor.location}</p>
+                    <p className="text-sm font-bold text-white truncate">{sensor.name}</p>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-widest font-medium mt-0.5">{sensor.status} • {sensor.location}</p>
                   </div>
-                  <ExternalLink size={14} className="text-slate-600 group-hover:text-orange-500 transition-colors" />
+                  <ExternalLink size={16} className="text-slate-600 group-hover:text-cyan-400 transition-colors" />
                 </div>
               ))}
             </div>
-            <Button variant="light" className="w-full mt-6 text-xs text-slate-500" onClick={() => window.location.href = '/inventory'}>View All Sensors</Button>
+            <Button variant="light" className="w-full mt-6 text-xs text-slate-500 hover:text-cyan-400 font-bold tracking-widest uppercase transition-colors" onClick={() => window.location.href = '/inventory'}>View All Sensors</Button>
           </Card>
 
-          <Card className="bg-[#0f0f0f] border-slate-800/50">
-            <Title className="text-white">Recent Anomalies</Title>
+          <Card className="bg-[#050505] border-[#1f2937] shadow-xl">
+            <Title className="text-white tracking-tight flex items-center gap-2">
+              <AlertTriangle size={18} className="text-amber-500" />
+              Recent Anomalies
+            </Title>
             <div className="mt-4 space-y-3">
               {alerts.slice(0, 4).map(alert => (
-                <div key={alert.id} className="flex gap-3 items-start border-l-2 border-orange-500 pl-3 py-1">
+                <div key={alert.id} className="flex gap-3 items-start border-l-2 border-red-500/80 bg-[#0a0a0a] p-3 rounded-r-xl">
                   <div className="flex-1">
-                    <p className="text-xs text-white font-medium line-clamp-1">{alert.message}</p>
-                    <p className="text-[10px] text-slate-500 mt-1">{new Date(alert.timestamp).toLocaleTimeString()}</p>
+                    <p className="text-xs text-slate-200 font-bold line-clamp-1">{alert.message}</p>
+                    <p className="text-[10px] text-slate-500 mt-1 font-mono">{new Date(alert.timestamp).toLocaleTimeString()}</p>
                   </div>
                 </div>
               ))}

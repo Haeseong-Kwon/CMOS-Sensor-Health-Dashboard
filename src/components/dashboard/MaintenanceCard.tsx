@@ -16,18 +16,18 @@ export default function MaintenanceCard({ name, currentValue, threshold, rulDays
     const healthScore = useMemo(() => calculateHealthScore(currentValue, threshold), [currentValue, threshold]);
 
     const getStatusStyles = (score: number) => {
-        if (score > 80) return { iconColor: 'text-emerald-500', bgColor: 'bg-emerald-500/10', border: 'border-emerald-500/30', badge: 'emerald', icon: ShieldCheck, text: 'Optimal' };
-        if (score > 50) return { iconColor: 'text-amber-500', bgColor: 'bg-amber-500/10', border: 'border-amber-500/30', badge: 'amber', icon: ShieldAlert, text: 'Degrading' };
-        return { iconColor: 'text-red-500', bgColor: 'bg-red-500/10', border: 'border-red-500/30', badge: 'red', icon: ShieldX, text: 'Critical' };
+        if (score > 80) return { iconColor: 'text-emerald-400', bgColor: 'bg-emerald-500/10', border: 'border-emerald-500/50', dropShadow: 'drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]', badge: 'emerald', icon: ShieldCheck, text: 'Optimal' };
+        if (score > 50) return { iconColor: 'text-amber-400', bgColor: 'bg-amber-500/10', border: 'border-amber-500/50', dropShadow: 'drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]', badge: 'amber', icon: ShieldAlert, text: 'Degrading' };
+        return { iconColor: 'text-red-500', bgColor: 'bg-red-500/10', border: 'border-red-500/60', dropShadow: 'drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]', badge: 'red', icon: ShieldX, text: 'Critical' };
     };
 
     const status = getStatusStyles(healthScore);
 
     return (
-        <Card className={`bg-gradient-to-br from-[#0f0f0f] to-[#151515] border ${status.border} shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 group`}>
+        <Card className={`bg-[#050505] border ${status.border} shadow-lg hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(6,182,212,0.1)] transition-all duration-300 group`}>
             <Flex alignItems="start" justifyContent="between">
                 <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-xl transition-all ${status.bgColor} ${status.iconColor} group-hover:scale-110`}>
+                    <div className={`p-2 rounded-xl transition-all ${status.bgColor} ${status.iconColor} ${status.dropShadow} group-hover:scale-110`}>
                         <status.icon size={20} />
                     </div>
                     <div>
@@ -53,15 +53,15 @@ export default function MaintenanceCard({ name, currentValue, threshold, rulDays
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-white/5 group-hover:border-white/10 transition-colors">
+                <div className="p-3 rounded-xl bg-[#0a0a0a] border border-[#1f2937] group-hover:border-cyan-500/30 transition-colors">
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Est. Failure</p>
-                    <p className="text-sm text-white mt-1 font-mono tracking-tighter">
+                    <p className="text-sm text-cyan-400 mt-1 font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
                         {new Date(Date.now() + rulDays * 24 * 60 * 60 * 1000).toLocaleDateString()}
                     </p>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500/5 to-transparent border border-orange-500/10 group-hover:border-orange-500/20 transition-colors">
+                <div className="p-3 rounded-xl bg-[#0a0a0a] border border-[#1f2937] group-hover:border-amber-500/30 transition-colors">
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Action Peak</p>
-                    <p className="text-sm text-orange-500 mt-1 font-bold tracking-tight">Maintenance</p>
+                    <p className="text-sm text-amber-500 mt-1 font-bold tracking-tight drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]">Maintenance</p>
                 </div>
             </div>
         </Card>
